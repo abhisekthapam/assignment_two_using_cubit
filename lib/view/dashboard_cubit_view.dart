@@ -10,7 +10,7 @@ class DashboardView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Abhisek Assignment 2 Using Cubit',
+          'Abhisek Assignment-2 Using Cubit',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,

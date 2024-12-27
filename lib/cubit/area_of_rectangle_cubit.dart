@@ -1,32 +1,35 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AreaOfRectangleCubit extends Cubit<int> {
-  AreaOfRectangleCubit() : super(100);
+abstract class RectangleAreaState {}
 
-  void increment() {
-    emit(state + 1);
-  }
+class RectangleAreaInitial extends RectangleAreaState {}
 
-  void decrement() {
-    if (state == -5) {
-      return;
+class RectangleAreaCalculating extends RectangleAreaState {}
+
+class RectangleAreaCalculated extends RectangleAreaState {
+  final double area;
+
+  RectangleAreaCalculated(this.area);
+}
+
+class RectangleAreaError extends RectangleAreaState {
+  final String errorMessage;
+
+  RectangleAreaError(this.errorMessage);
+}
+
+class AreaOfRectangleCubit extends Cubit<RectangleAreaState> {
+  AreaOfRectangleCubit() : super(RectangleAreaInitial());
+
+  void calculateRectangleArea(double length, double width) {
+    try {
+      emit(RectangleAreaCalculating());
+
+      double area = length * width;
+
+      emit(RectangleAreaCalculated(area));
+    } catch (e) {
+      emit(RectangleAreaError("Error in calculating area"));
     }
-    emit(state - 1);
-  }
-
-  void add(int first, int second) {
-    emit(first + second);
-  }
-
-  void subtract(int first, int second) {
-    emit(first - second);
-  }
-
-  void multiply(int first, int second) {
-    emit(first * second);
-  }
-
-  void reset() {
-    emit(0);
   }
 }
