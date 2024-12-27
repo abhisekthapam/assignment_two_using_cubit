@@ -1,17 +1,35 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class StudentState {
-  final String name;
-  final String address;
-  final String age;
+abstract class CircleAreaState {}
 
-  StudentState({this.name = '', this.address = '', this.age = ''});
+class CircleAreaInitial extends CircleAreaState {}
+
+class CircleAreaCalculating extends CircleAreaState {}
+
+class CircleAreaCalculated extends CircleAreaState {
+  final double area;
+
+  CircleAreaCalculated(this.area);
 }
 
-class AreaOfCirlceCubit extends Cubit<StudentState> {
-  AreaOfCirlceCubit() : super(StudentState());
+class CircleAreaError extends CircleAreaState {
+  final String errorMessage;
 
-  void updateStudent(String name, String address, String age) {
-    emit(StudentState(name: name, address: address, age: age));
+  CircleAreaError(this.errorMessage);
+}
+
+class AreaOfCirlceCubit extends Cubit<CircleAreaState> {
+  AreaOfCirlceCubit() : super(CircleAreaInitial());
+
+  void calculateCircleArea(double radius) {
+    try {
+      emit(CircleAreaCalculating());
+
+      double area = 3.14159265359 * radius * radius;
+
+      emit(CircleAreaCalculated(area));
+    } catch (e) {
+      emit(CircleAreaError("Error in calculating area"));
+    }
   }
 }
